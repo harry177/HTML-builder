@@ -11,23 +11,30 @@ const filesCopyPath = path.join(__dirname, 'files-copy');
 
 function copyDir() {
 
-// Creating new folder
+// Deleting previous folder + creating new folder
+fs.rm(filesCopyPath, { recursive: true, force: true}, error => {
+  if(error) throw error;
 
-fs.mkdir(filesCopyPath, { recursive: true }, error => {
+  fs.mkdir(filesCopyPath, { recursive: true }, error => {
     if(error) throw error;
- });
+
 
 // Reading source folder + copying files 
 
-fs.readdir(filesPath, { withFileTypes: true }, (error, files) => {
-    if (error) throw error;
+
+    fs.readdir(filesPath, { withFileTypes: true }, (error, files) => {
+      if(error) throw error;
     
       files.forEach(file => {
         fs.copyFile(path.join(__dirname, 'files', file.name), path.join(__dirname, 'files-copy', file.name), error => {
           if (error) throw error;
-        })
+        });
       });
     });
-};
+  });
+});
+
+}
+
 
 copyDir();
