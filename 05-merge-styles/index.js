@@ -6,6 +6,10 @@ const path = require('path');
 const sourceStylePath = path.join(__dirname, 'styles');
 const bundleStylePath = path.join(__dirname, 'project-dist', 'bundle.css');
 
+fs.mkdir(path.join(__dirname, 'project-dist'), { recursive: true }, error => {
+    if (error) throw error;
+});
+
 // Creating WriteStream
 
 const writeStream = fs.createWriteStream(bundleStylePath);
