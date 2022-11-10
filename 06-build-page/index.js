@@ -16,37 +16,25 @@ fs.mkdir(distPath, { recursive: true }, error => {
 // Creating index.html + replacing template-tags 
 
 
-fs.readFile(templatePath, (error, fileContent) => {
-    if(error) throw error;
-
-    fs.writeFile(path.join(distPath, 'index.html'), fileContent, error => {
-        if(error) throw error;
-
-        fs.readFile(path.join(distPath, 'index.html'), 'utf-8', (error, fileContent) => {
-            if(error) throw error;
-
-
-        fs.readdir(componentsPath, (error, files) => {
-            if(error) throw error;
-
-            files.forEach(file => {
-                fs.readFile(path.join(componentsPath, file), 'utf-8', (error, content) => {
-                    if(error) throw error;
-                    fileContent = fileContent.replace(`{{${path.parse(file).name}}}`, content);
-                
-      
-                fs.writeFile(path.join(distPath, 'index.html'), fileContent, error => {
-                   if(error) throw error;
-                })
+fs.readFile(templatePath, 'utf-8', (error, fileContent) => {
+    if (error) throw error;
+  
+  
+          fs.readdir(componentsPath, (error, files) => {
+            if (error) throw error;
+  
+            files.forEach((file) => {
+              fs.readFile(path.join(componentsPath, file), "utf-8", (error, content) => {
+                  if (error) throw error;
+                  fileContent = fileContent.replace(`{{${path.parse(file).name}}}`, content);
+                  const result = fs.createWriteStream(path.join(distPath, 'index.html'));
+                  result.write(fileContent);
+                }
+              );
             });
-
-        })
-    });
-            
-          })
-
-    });
-})
+          });
+  
+  });
 
 // Defining styles pathes
 
